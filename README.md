@@ -2,7 +2,7 @@
 
 Ce dépôt contient mes codes pour les TP de l'UE "Programmation Fonctionnelle" du semestre 5 de la double-licence Mathématiques et Informatique de l'Université Paris Cité.
 
-> [!DANGER]
+> [!CAUTION]
 > Ce dépôt est destiné à un usage personnel et n'est pas destiné à être partagé ou utilisé pour éviter le travail personnel.
 
 > [!NOTE]
