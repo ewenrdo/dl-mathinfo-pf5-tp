@@ -16,24 +16,82 @@ let rec list_sigma list =
   | [] -> 0
   | head::rest -> head + (list_sigma rest)
 
-let rec print_int_list list =
-  match list with
-  | [] -> print_newline ()
-  | head::tail -> print_int(head); print_string ","; print_int_list(tail)
-
 let append list1 list2 =
   let rec aux list1 list2 acc =
     match list1 with 
     | []-> (match list2 with 
         | [] -> List.rev acc
-        | head2::tail2 -> aux list1 tail2 (head2::acc))
+        | head2::tail2 -> aux [] tail2 (head2::acc))
     | head::tail -> aux tail list2 (head::acc)
   in aux list1 list2 []
 
+let split list =
+  let rec aux list acc =
+    match list with
+    | [] -> (List.rev (fst acc), List.rev(snd acc))
+    | head::tail -> aux tail ((fst head)::fst acc, (snd head)::snd acc)
+  in aux list ([],[])
 
 
+let rev list =
+  let rec aux list acc =
+    match list with
+    | [] -> acc
+    | head::tail -> aux tail (head::acc)
+  in aux list []
+
+let flatten list =
+  let rec aux list acc =
+    match list with
+    | [] -> acc
+    | head::tail -> aux tail (append head acc)
+  in aux (rev list) []
+(* on aurait pu faire acc @ head, mais c'est pas opti, là, on est en O(N). *)
+
+let rec mem x list =
+  match list with
+  | [] -> false
+  | head::tail -> head = x || mem x tail
+
+let simplify list =
+  let rec aux list acc =
+    match list with
+    | [] -> rev acc
+    | head::tail -> if (mem head acc) then aux tail acc else aux tail (head::acc)
+  in aux list []
+
+let successors x list =
+  let rec aux x list acc = 
+    match list with 
+    | [] -> rev acc
+    | [_] -> rev acc (* 1 seul élément, équivalent à head::[] *)
+    | head::succ::tail -> if head = x then (aux x (succ::tail) (succ::acc)) else (aux x (succ::tail) acc)
+  in aux x list []
+
+let list_min list =
+    match list with 
+    | [] -> failwith "Empty list doesn't have a min"
+    | head::tail -> let rec aux list acc =
+      match list with
+      | [] -> acc
+      | head::tail -> aux tail (min head acc)
+    in aux list head
+
+(* Commandes utiles *)
+
+let rec print_int_list list =
+  match list with
+  | [] -> print_newline ()
+  | head::tail -> print_int(head); print_string ","; print_int_list(tail)
+
+let rec print_char_list list =
+  match list with
+  | [] -> print_newline ()
+  | head::tail -> print_char(head); print_string ","; print_char_list(tail)
+
+(* Tests *)
 let () = 
-  let list1 = [7;2;3;1] in
-  let list2 = [9;6;2;3] in
 
-  print_int_list (append list1 list2)
+  let list = [1;1;2;9;2;1;4;7;6] in
+  print_int (list_min list);
+  print_newline ();
