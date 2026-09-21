@@ -101,6 +101,18 @@ let filter f list =
     | head::tail -> if f head then aux f tail (head::acc) else aux f tail acc
   in aux f list []
 
+let rec find p list =
+  match list with 
+  | [] -> raise Not_found
+  | head::tail -> if p head then head else find p tail
+
+let partition p list =
+  let rec aux p list (yes, no) =
+    match list with
+    | [] -> (rev yes, rev no)
+    | head::tail -> if p head then aux p tail (head::yes, no) else aux p tail (yes, head::no)
+    in aux p list ([], [])
+
 (* Commandes utiles *)
 let rec print_int_list list =
   match list with
