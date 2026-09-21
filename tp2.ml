@@ -77,8 +77,31 @@ let list_min list =
       | head::tail -> aux tail (min head acc)
     in aux list head
 
-(* Commandes utiles *)
+(* Exercice 3 *)
+let map f list =
+  let rec aux f list acc =
+    match list with 
+    | [] -> rev acc
+    | head::tail -> aux f tail ((f head)::acc)
+  in aux f list []
 
+let rec exists p list =
+  match list with
+  | [] -> false
+  | head::tail -> (p head) || exists p tail
+let rec for_all p list =
+  match list with
+  | [] -> true
+  | head::tail -> (p head) && for_all p tail
+
+let filter f list =
+  let rec aux f list acc =
+    match list with
+    | [] -> rev acc
+    | head::tail -> if f head then aux f tail (head::acc) else aux f tail acc
+  in aux f list []
+
+(* Commandes utiles *)
 let rec print_int_list list =
   match list with
   | [] -> print_newline ()
